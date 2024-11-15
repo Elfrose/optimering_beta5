@@ -1,37 +1,37 @@
-let currentRoad = null;
+let currentOrt = null;
 
-// Ändra färg på vägen baserat på status
-function changeRoadColor(roadId, status) {
-    var roadElement = document.getElementById(roadId);
+// Ändra färg på orten baserat på status
+function changeOrtColor(ortId, status) {
+    var ortElement = document.getElementById(ortId);
     switch (status) {
         case "Optimerad":
-            roadElement.style.backgroundColor = "rgba(0, 128, 0, 0.5)";
+            ortElement.style.backgroundColor = "rgba(0, 128, 0, 0.5)";
             break;
         case "Planerad":
-            roadElement.style.backgroundColor = "rgba(255, 255, 0, 0.5)";
+            ortElement.style.backgroundColor = "rgba(255, 255, 0, 0.5)";
             break;
         case "Avställd":
-            roadElement.style.backgroundColor = "rgba(255, 0, 0, 0.5)";
+            ortElement.style.backgroundColor = "rgba(255, 0, 0, 0.5)";
             break;
         case "Ej Optimerad":
-            roadElement.style.backgroundColor = "rgba(0, 0, 0, 0)";
+            ortElement.style.backgroundColor = "rgba(0, 0, 0, 0)";
             break;
     }
 }
 
-// Hantera högerklick på vägar och visa contextmenyn
-document.querySelectorAll('.road').forEach(function(road) {
-    road.addEventListener('contextmenu', function(event) {
+// Hantera högerklick på orter och visa contextmenyn
+document.querySelectorAll('.ort').forEach(function(ort) {
+    ort.addEventListener('contextmenu', function(event) {
         event.preventDefault();
-        currentRoad = this;
+        currentOrt = this;
         showContextMenu(event.clientX, event.clientY);
     });
 });
 
 // Funktion för att uppdatera kommentarssektionen
-function updateCommentSectionStatus(roadId, status) {
-    console.log("Uppdaterar " + roadId + " till " + status);
-    var statusDropdown = document.querySelector('tr[data-road-id="' + roadId + '"] select');
+function updateCommentSectionStatus(ortId, status) {
+    console.log("Uppdaterar " + ortId + " till " + status);
+    var statusDropdown = document.querySelector('tr[data-ort-id="' + ortId + '"] select');
     if (statusDropdown) {
         statusDropdown.value = status;
     }
@@ -46,11 +46,11 @@ function showContextMenu(x, y) {
     menu.style.display = 'block';
 }
 
-// Funktion för att sätta vägens status från contextmenyn
-function setRoadStatus(status) {
-    if (currentRoad) {
-        changeRoadColor(currentRoad.id, status);
-        updateCommentSectionStatus(currentRoad.id, status);
+// Funktion för att sätta ortens status från contextmenyn
+function setOrtStatus(status) {
+    if (currentOrt) {
+        changeOrtColor(currentOrt.id, status);
+        updateCommentSectionStatus(currentOrt.id, status);
     }
     document.getElementById('contextMenu').style.display = 'none';
 }
@@ -85,12 +85,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hantera ändringar i status-dropdowns i kommentarssektionen
     document.querySelectorAll('#commentsTable select').forEach(function(selectElement) {
         selectElement.addEventListener('change', function() {
-            var roadId = this.closest('tr').getAttribute('data-road-id');
+            var ortId = this.closest('tr').getAttribute('data-ort-id');
             var selectedStatus = this.value;
-            changeRoadColor(roadId, selectedStatus);
+            changeOrtColor(ortId, selectedStatus);
         });
     });
 });
+
+// Event listener för att hantera klick på undermenyn
 document.addEventListener('DOMContentLoaded', function() {
     var submenuToggles = document.querySelectorAll('.submenu-toggle');
 
@@ -105,13 +107,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-function saveComment(roadId) {
-    // Hämta kommentaren från textrutan för den specifika vägen med roadId
-    var comment = document.getElementById('comment-' + roadId).value;
+
+// Funktion för att spara kommentarer
+function saveComment(ortId) {
+    // Hämta kommentaren från textrutan för den specifika orten med ortId
+    var comment = document.getElementById('comment-' + ortId).value;
 
     // Här kan du skicka kommentaren till en server, lagra den lokalt, eller göra vad du vill med den
     // För detta exempel, loggar vi bara kommentaren till konsolen
-    console.log('Sparar kommentar för väg ' + roadId + ': ' + comment);
+    console.log('Sparar kommentar för ort ' + ortId + ': ' + comment);
 }
-
-
